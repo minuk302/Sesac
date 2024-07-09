@@ -1,7 +1,7 @@
 import google.generativeai as genai
 import configparser
 
-def get_secret_value(section, key, file_name='_secret.ini'):
+def get_secret_value(section, key, file_name='secret.ini'):
     config = configparser.ConfigParser()
     config.read(file_name)
     

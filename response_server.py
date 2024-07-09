@@ -1,7 +1,11 @@
 from flask import Flask, request
 from twilio.twiml.voice_response import VoiceResponse, Gather
+import gemini_test
 
 app = Flask(__name__)
+
+# callBot keeps conversation history on memory. When server is down, history will be lost.
+callbot = gemini_test.callBot()
 
 def create_speech_gather():
     return Gather(
@@ -24,9 +28,9 @@ def process_speech():
     resp = VoiceResponse()
     if 'SpeechResult' in request.values:
         text = request.values['SpeechResult']
-        response_text = "하신 말씀을 반복하겠습니다." + text
+        number = request.values['Caller']
+        response_text = callbot.chat(text, number)
         resp.say(response_text, voice='Polly.Seoyeon')
-        # caller : request.values['Caller']
     else:
         # even this can be sent to LLM
         resp.say("잘 못들었어요. 다시 말씀해주시겠어요?", voice='Polly.Seoyeon')
